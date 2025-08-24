@@ -1,10 +1,11 @@
+import random
 import discord
 from discord.ext import commands, tasks
 import aiohttp
 import asyncio
 import json
 import os
-from datetime import datetime, timezone
+from datetime import datetime
 import logging
 from typing import Dict, List, Optional, Set
 from enum import Enum
@@ -194,7 +195,7 @@ class CSFloatBot(commands.Bot):
         
         return embed
     
-    @tasks.loop(seconds=30)
+    @tasks.loop(seconds=60)
     async def check_listings(self):
         """Check for new listings periodically"""
         if not self.tracking_configs:
@@ -206,6 +207,7 @@ class CSFloatBot(commands.Bot):
             return
         
         for config_name, config in self.tracking_configs.items():
+            await asyncio.sleep(random.uniform(0, 1))
             try:
                 # Fetch listings with the specified parameters
                 listings = await self.fetch_listings(**config['params'])
